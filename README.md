@@ -14,7 +14,7 @@ docker push YOUR_REPO/IMAGE_NAME
 ```
 
 2. Create k8s secret with your docker creds
-Check your docker creds: they must be on path ~/.docker/config.json; if path is valid, create secret with the follwoing command:
+Execute docker login and if login succesfull, check your docker creds: they must be on path ~/.docker/config.json; if path is valid, create secret with the follwoing command:
 ```
 kubectl create secret generic regcred \
     --from-file=.dockerconfigjson=~/.docker/config.json \
