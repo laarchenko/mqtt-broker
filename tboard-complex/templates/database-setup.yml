@@ -33,7 +33,7 @@ spec:
   - name: regcred
   containers:
   - name: tb-db-setup
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     image: vampir/tb-broker:latest
     envFrom:
       - configMapRef:

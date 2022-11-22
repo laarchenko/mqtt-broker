@@ -43,7 +43,7 @@ spec:
       - name: regcred
       containers:
         - name: server
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           image: vampir/tb-broker:latest
           ports:
             - containerPort: 8083
@@ -58,7 +58,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: TB_KAFKA_SERVERS
-              value: "tb-kafka:9092"
+              value: "kafka-0.kafka-headless.default.svc.cluster.local:9092"
             - name: HTTP_BIND_PORT
               value: "8083"
             - name: LISTENER_TCP_BIND_PORT
