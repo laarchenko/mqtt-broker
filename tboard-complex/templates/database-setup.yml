@@ -18,7 +18,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: tb-db-setup
-  namespace: thingsboard-mqtt-broker
+  namespace: {{ .Release.Namespace }}
 spec:
   volumes:
   - name: tb-broker-config
@@ -30,11 +30,11 @@ spec:
       - key: logback
         path: logback.xml
   imagePullSecrets:
-  - name: regcred
+  - name: {{ .Values.databaseSetup.registryCredsSecretName }}
   containers:
   - name: tb-db-setup
-    imagePullPolicy: IfNotPresent
-    image: vampir/tb-broker:latest
+    imagePullPolicy: {{ .Values.databaseSetup.imagePullPolicy }}
+    image: {{ .Values.databaseSetup.imageName }}
     envFrom:
       - configMapRef:
           name: tb-broker-db-config

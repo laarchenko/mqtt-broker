@@ -18,21 +18,21 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
     name: tb-broker-db-config
-    namespace: thingsboard-mqtt-broker
+    namespace: {{ .Release.Namespace }}
     labels:
         name: tb-broker-db-config
 data:
-    SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
-    SPRING_DRIVER_CLASS_NAME: org.postgresql.Driver
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres.default.svc.cluster.local:5432/thingsboard_mqtt_broker
-    SPRING_DATASOURCE_USERNAME: postgres
-    SPRING_DATASOURCE_PASSWORD: postgres
+    SPRING_JPA_DATABASE_PLATFORM: {{ .Values.postgresql.springJpaDatabasePlatform }}
+    SPRING_DRIVER_CLASS_NAME: {{ .Values.postgresql.springDriverClassname }}
+    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres.{{ .Release.Namespace }}.svc.cluster.local:5432/{{ .Values.postgresql.auth.database }}
+    SPRING_DATASOURCE_USERNAME: {{ .Values.postgresql.springDataSourceUsername }}
+    SPRING_DATASOURCE_PASSWORD: {{ .Values.postgresql.auth.postgresPassword }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: tb-broker-config
-  namespace: thingsboard-mqtt-broker
+  namespace: {{ .Release.Namespace }}
   labels:
     name: tb-broker-config
 data:

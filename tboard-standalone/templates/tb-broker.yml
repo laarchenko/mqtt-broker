@@ -17,18 +17,18 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: tb-broker
-  namespace: thingsboard-mqtt-broker
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   serviceName: tb-broker
-  replicas: 1
+  replicas: {{.Values.broker.replicas }}
   selector:
     matchLabels:
-      app: tb-broker
+      {{- include "tboard.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: tb-broker
+        {{- include "tboard.selectorLabels" . | nindent 8 }}
     spec:
       volumes:
         - name: tb-broker-config
@@ -40,11 +40,11 @@ spec:
               - key: logback
                 path:  logback.xml
       imagePullSecrets:
-      - name: regcred
+      - name: {{ .Values.broker.registryCredsSecretName }}
       containers:
         - name: server
-          imagePullPolicy: Always
-          image: vampir/tb-broker:latest
+          imagePullPolicy: {{ .Values.broker.imagePullPolicy }}
+          image: {{ .Values.broker.imageName }}
           ports:
             - containerPort: 8083
               name: http
@@ -58,7 +58,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: TB_KAFKA_SERVERS
-              value: {{ .Values.broker.data.kafka.tbKafkaServers }}
+              value: {{ .Values.kafka.serversUrl }}
             - name: HTTP_BIND_PORT
               value: "8083"
             - name: LISTENER_TCP_BIND_PORT
@@ -103,7 +103,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-broker
-  namespace: thingsboard-mqtt-broker
+  namespace: {{ .Release.Namespace }}
 spec:
   type: NodePort
   selector:

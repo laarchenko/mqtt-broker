@@ -1,6 +1,7 @@
 # Default values for mqttBroker.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+nameOverride: "tb-standalone"
 
 autoscaling:
   enabled: false
@@ -9,20 +10,18 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
 broker:
-  data:
-    postgres:
-      springJpaDatabasePlatform: org.hibernate.dialect.PostgreSQLDialect
-      springDriverClassname: org.postgresql.Driver
-      springDataSourceUrl: jdbc:postgresql://postgres:5432/thingsboard_mqtt_broker
-      springDataSourceUsername: postgres
-      springDataSourcePassword: postgres
-    kafka:
-      tbKafkaServers: kafka.default.svc.cluster.local:9092
+  replicas: 1
+  imageName: vampir/tb-broker:latest
+  imagePullPolicy: IfNotPresent
+  registryCredsSecretName: regcred
 
+postgresql:
+  springJpaDatabasePlatform: org.hibernate.dialect.PostgreSQLDialect
+  springDriverClassname: org.postgresql.Driver
+  springDataSourceUrl: jdbc:postgresql://postgres:5432/thingsboard_mqtt_broker
+  springDataSourceUsername: postgres
+  springDataSourcePassword: postgres
+
+kafka:
+  serversUrl: kafka.tb.svc.cluster.local:9092
