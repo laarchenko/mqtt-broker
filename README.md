@@ -24,7 +24,7 @@ kubectl create secret generic regcred \
 ## Run
 If you would like to run thingsboard from zero, use the following command:
 ```
-helm install --create-namespace --namespace=tb --generate-name tboard-complex/ --set broker.imageName="YOUR_DOCKER_IMAGE_NAME" --set databaseSetup.imageName="YOUR_DOCKER_IMAGE_NAME"
+helm install --create-namespace --namespace=tb --generate-name tboard-complex/ --set broker.imageName="YOUR DOCKER REPO/IMAGE" --set databaseSetup.imageName="YOUR DOCKER REPO/IMAGE"
 ```
 In case you need just broker, execute the following steps:
 1. Create file **myValues.yaml** and fill in it by the structure:
