@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: tb-db-setup
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: tb-db-setup
+        imagePullPolicy: {{ .Values.databaseSetup.imagePullPolicy }}
+        image: {{ .Values.databaseSetup.imageName }}
+        command: ['sh', '-c', 'while [ ! -f /tmp/install-finished ]; do sleep 2; done;']
+        envFrom:
+          - configMapRef:
+              name: tb-broker-db-config
+        volumeMounts:
+        - mountPath: /config
+          name: tb-broker-config
+      restartPolicy: Never
+      volumes:
+        - name: tb-broker-config
+          configMap:
+            name: tb-broker-config
+            items:
+            - key: conf
+              path: thingsboard-mqtt-broker.conf
+            - key: logback
+              path: logback.xml
+  backoffLimit: 1
