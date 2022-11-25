@@ -14,12 +14,10 @@ broker:
   replicas: 1
   imageName: vampir/tb-broker:latest
   imagePullPolicy: IfNotPresent
-  registryCredsSecretName: regcred
 
 databaseSetup:
   imageName: vampir/tb-broker:latest
   imagePullPolicy: IfNotPresent
-  registryCredsSecretName: regcred
 
 postgresql:
   fullnameOverride: postgres

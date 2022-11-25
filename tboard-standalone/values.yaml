@@ -14,7 +14,6 @@ broker:
   replicas: 1
   imageName: vampir/tb-broker:latest
   imagePullPolicy: IfNotPresent
-  registryCredsSecretName: regcred
 
 postgresql:
   springJpaDatabasePlatform: org.hibernate.dialect.PostgreSQLDialect

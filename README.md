@@ -1,38 +1,30 @@
-## Preparation
-
-1. Add mqtt-broker image to your repo. To create image use the following command
-```
-mvn clean install -DskipTests -Ddockerfile.skip=false
-```
-then tag image with your repo or custom image name
-```
-docker tag thingsboard/tb-mqtt-broker YOUR_REPO/IMAGE_NAME 
-```
-and push it to your private remote repository
-```
-docker push YOUR_REPO/IMAGE_NAME
-```
-
-2. Create k8s secret with your docker creds
-   Execute docker login and if login succesfull, check your docker creds: they must be on path ~/.docker/config.json; if path is valid, create secret with the follwoing command:
-```
-kubectl create secret generic regcred \
-    --from-file=.dockerconfigjson=~/.docker/config.json \
-    --type=kubernetes.io/dockerconfigjson
-```
-
 ## Run
+
+### Without clonning repo
+If charts are hosted, they could be available on this [repo](https://laarchenko.github.io/), so you can use them with these commands:
+```
+helm repo add tbRepo https://laarchenko.github.io/
+helm repo update
+```
+to add helm charts and run them this way:
+
+1. to run full tb infrastructure -> 
+```
+helm install --debug --create-namespace --namespace tb tbRepo/tboard-complex --generate-name
+```
+2. to run only broker ->
+```
+helm install --namespace="NAMESPACE WHERE POSTGRES AND KAFKA DEPLOYED" --generate-name -f myValues.yaml tbRepo/tboard-standalone
+```
+ 
+### If you ready to clone repo
 If you would like to run thingsboard from zero, use the following command:
 ```
-helm install --create-namespace --namespace=tb --generate-name tboard-complex/ --set broker.imageName="YOUR DOCKER REPO/IMAGE" --set databaseSetup.imageName="YOUR DOCKER REPO/IMAGE"
+helm install --create-namespace --namespace=tb --generate-name tboard-complex/
 ```
 In case you need just broker, execute the following steps:
 1. Create file **myValues.yaml** and fill in it by the structure:
 ```
-broker:
-  imageName: "YOUR DOCKER REPO/IMAGE"
-databaseSetup:
-  imageName: "YOUR DOCKER REPO/IMAGE"
 kafka:
   serversUrl: "KAFKA`S SERVICE URL"
 postgresql:
@@ -44,3 +36,4 @@ postgresql:
 ```
 helm install --namespace="NAMESPACE WHERE POSTGRES AND KAFKA DEPLOYED" --generate-name -f myValues.yaml tboard-standalone/ 
 ```
+

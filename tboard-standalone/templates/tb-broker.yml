@@ -39,8 +39,6 @@ spec:
                 path:  thingsboard-mqtt-broker.conf
               - key: logback
                 path:  logback.xml
-      imagePullSecrets:
-      - name: {{ .Values.broker.registryCredsSecretName }}
       containers:
         - name: server
           imagePullPolicy: {{ .Values.broker.imagePullPolicy }}
